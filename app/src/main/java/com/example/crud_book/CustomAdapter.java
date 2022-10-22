@@ -26,17 +26,19 @@ import java.util.*;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     private Context context;
     Activity activity;
-    private ArrayList trip_id, trip_name, trip_destination, trip_date, trip_risk, trip_description;
+    private ArrayList<Trip> tripArrayList;
+//    private ArrayList trip_id, trip_name, trip_destination, trip_date, trip_risk, trip_description;
 
-    CustomAdapter(Activity activity, Context context, ArrayList trip_id, ArrayList trip_name, ArrayList trip_destination, ArrayList trip_date, ArrayList trip_risk, ArrayList trip_description) {
+    CustomAdapter(Activity activity, Context context, ArrayList<Trip> tripArrayList) {
         this.activity = activity;
         this.context = context;
-        this.trip_id = trip_id;
-        this.trip_name = trip_name;
-        this.trip_destination = trip_destination;
-        this.trip_date = trip_date;
-        this.trip_risk = trip_risk;
-        this.trip_description = trip_description;
+        this.tripArrayList = tripArrayList;
+//        this.trip_id = trip_id;
+//        this.trip_name = trip_name;
+//        this.trip_destination = trip_destination;
+//        this.trip_date = trip_date;
+//        this.trip_risk = trip_risk;
+//        this.trip_description = trip_description;
 
 //        this.trip_id_filter = trip_id;
 //        this.trip_name_filter = trip_name;
@@ -56,15 +58,23 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull CustomAdapter.MyViewHolder holder, final int position) {
+        Trip trip = tripArrayList.get(position);
 
-        holder.trip_id_txt.setText(String.valueOf(trip_id.get(position)));
-        holder.trip_name_txt.setText(String.valueOf(trip_name.get(position)));
-        holder.trip_destination_txt.setText(String.valueOf("To: " + trip_destination.get(position)));
-        holder.trip_date_txt.setText(String.valueOf(trip_date.get(position)));
-        holder.trip_risk_txt.setText(String.valueOf("Risk: " + trip_risk.get(position)));
-        holder.trip_description_txt.setText(String.valueOf("Description: " + trip_description.get(position)));
+        String trip_id = String.valueOf(trip.getTripId());
+        String trip_name = String.valueOf(trip.getTripName());
+        String trip_destination = String.valueOf(trip.getTripDestination());
+        String trip_date = String.valueOf(trip.getTripDate());
+        String trip_risk = String.valueOf(trip.getTripRisk());
+        String trip_description = String.valueOf(trip.getTripDescription());
 
-        if(trip_risk.get(position).equals("Yes")) {
+        holder.trip_id_txt.setText(trip_id);
+        holder.trip_name_txt.setText(trip_name);
+        holder.trip_destination_txt.setText("To: " + trip_destination);
+        holder.trip_date_txt.setText(trip_date);
+        holder.trip_risk_txt.setText("Risk: " + trip_risk);
+        holder.trip_description_txt.setText("Description: " + trip_description);
+
+        if(trip_risk.equals("Yes")) {
             holder.trip_risk_txt.setTextColor(Color.parseColor("#FF0000"));
         }else{
             holder.trip_risk_txt.setTextColor(Color.parseColor("#00FF00"));
@@ -74,13 +84,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, UpdateActivity.class);
-                intent.putExtra("id", String.valueOf(trip_id.get(position)));
-                intent.putExtra("name", String.valueOf(trip_name.get(position)));
-                intent.putExtra("destination", String.valueOf(trip_destination.get(position)));
-                intent.putExtra("date", String.valueOf(trip_date.get(position)));
-                intent.putExtra("risk", String.valueOf(trip_risk.get(position)));
-                intent.putExtra("description", String.valueOf(trip_description.get(position)));
-//                activity.startActivityForResult(intent, 123);
+                intent.putExtra("id", trip_id);
+                intent.putExtra("name", trip_name);
+                intent.putExtra("destination", trip_destination);
+                intent.putExtra("date", trip_date);
+                intent.putExtra("risk", trip_risk);
+                intent.putExtra("description", trip_description);
+
                 activity.startActivityForResult(intent, 1);
             }
         });
@@ -88,7 +98,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return trip_id.size();
+        return tripArrayList.size();
     }
 
 //    @Override
