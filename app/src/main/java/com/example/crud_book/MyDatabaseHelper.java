@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private Context context;
@@ -73,17 +75,55 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         Toast.makeText(context, "Insert data into database successfully", Toast.LENGTH_SHORT).show();
     }
 
-    Cursor readAllData() {
+    public ArrayList<Trip> readAllData() {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
+        ArrayList<Trip> trips = new ArrayList<>();
 
         if(db != null) {
             cursor = db.rawQuery(query, null);
+
+            if(cursor.getCount() == 0) {
+                Log.d("Data", "No data");
+            }
+
+            while(cursor.moveToNext()) {
+                String id = cursor.getString(0);
+                String name = cursor.getString(1);
+                String destination = cursor.getString(2);
+                String date = cursor.getString(3);
+                String risk = cursor.getString(4);
+                String description = cursor.getString(5);
+
+                trips.add(new Trip(id, name, destination, date, risk, description));
+            }
+
+//            if (cursor.moveToFirst()) {
+//                do {
+                    // on below line we are adding the data from cursor to our array list.
+//                    courseModalArrayList.add(new CourseModal(cursorCourses.getString(1),
+//                            cursorCourses.getString(4),
+//                            cursorCourses.getString(2),
+//                            cursorCourses.getString(3)));
+//                    String id = cursor.getString(0);
+//                    String name = cursor.getString(1);
+//                    String destination = cursor.getString(2);
+//                    String date = cursor.getString(3);
+//                    String risk = cursor.getString(4);
+//                    String description = cursor.getString(5);
+//
+//                    trips.add(new Trip(id, name, destination, date, risk, description));
+//                } while ( cursor.moveToNext());
+                // moving our cursor to next.
+//            }
+            // at last closing our cursor
+            // and returning our array list.
+//            cursor.close();
         }
 
-        return cursor;
+        return trips;
     }
 
     void updateData(String row_id, String name, String destination, String date, String risk, String description) {

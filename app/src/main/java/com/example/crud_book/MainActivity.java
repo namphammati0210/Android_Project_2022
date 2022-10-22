@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton add_button;
     MyDatabaseHelper myDB;
-    ArrayList<String> trip_id, trip_name, trip_destination, trip_date, trip_risk, trip_description;
+//    ArrayList<String> trip_id, trip_name, trip_destination, trip_date, trip_risk, trip_description;
+    ArrayList<Trip> tripArrayList;
     CustomAdapter customAdapter;
 
     @Override
@@ -51,17 +52,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup trip data
         myDB = new MyDatabaseHelper(MainActivity.this);
-        trip_id = new ArrayList<>();
-        trip_name = new ArrayList<>();
-        trip_destination = new ArrayList<>();
-        trip_date = new ArrayList<>();
-        trip_risk = new ArrayList<>();
-        trip_description = new ArrayList<>();
+//        trip_id = new ArrayList<>();
+//        trip_name = new ArrayList<>();
+//        trip_destination = new ArrayList<>();
+//        trip_date = new ArrayList<>();
+//        trip_risk = new ArrayList<>();
+//        trip_description = new ArrayList<>();
 
         // Render data to recycleView with CustomAdapter
-        storeDataInArrays();
+//        storeDataInArrays();
+        tripArrayList = myDB.readAllData();
 
-        customAdapter = new CustomAdapter(MainActivity.this, this, trip_id, trip_name, trip_destination, trip_date, trip_risk, trip_description);
+        customAdapter = new CustomAdapter(MainActivity.this, this, tripArrayList);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
@@ -95,23 +97,23 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
-    void storeDataInArrays() {
-        Cursor cursor = myDB.readAllData();
-
-        if(cursor.getCount() == 0) {
-            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        while(cursor.moveToNext()) {
-            trip_id.add(cursor.getString(0));
-            trip_name.add(cursor.getString(1));
-            trip_destination.add(cursor.getString(2));
-            trip_date.add(cursor.getString(3));
-            trip_risk.add(cursor.getString(4));
-            trip_description.add(cursor.getString(5));
-        }
-
-
-    }
+//    void storeDataInArrays() {
+//        Cursor cursor = myDB.readAllData();
+//
+//        if(cursor.getCount() == 0) {
+//            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        while(cursor.moveToNext()) {
+//            trip_id.add(cursor.getString(0));
+//            trip_name.add(cursor.getString(1));
+//            trip_destination.add(cursor.getString(2));
+//            trip_date.add(cursor.getString(3));
+//            trip_risk.add(cursor.getString(4));
+//            trip_description.add(cursor.getString(5));
+//        }
+//
+//
+//    }
 }
