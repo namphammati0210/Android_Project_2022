@@ -40,6 +40,28 @@ public class AddActivity extends AppCompatActivity {
                 int selectedId = isRisk_radioGroup.getCheckedRadioButtonId();
                 radioButton = (RadioButton) findViewById(selectedId);
 
+                if(name_input.getText().toString().trim().equals("")){
+                    name_input.setError("Please enter trip name");
+                    name_input.requestFocus();
+                    return;
+                }
+                if(destination_input.getText().toString().trim().equals("")){
+                    destination_input.setError("Please enter destination");
+                    destination_input.requestFocus();
+                    return;
+                }
+                if(date_input.getText().toString().trim().equals("")){
+                    date_input.setError("Please enter date");
+                    date_input.requestFocus();
+                    return;
+                }
+                if(description_input.getText().toString().trim().equals("")){
+                    description_input.setError("Please enter description");
+                    description_input.requestFocus();
+                    return;
+                }
+
+
                 dbInstance.createTrip(
                         name_input.getText().toString().trim(),
                         destination_input.getText().toString().trim(),

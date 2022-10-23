@@ -17,35 +17,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.*;
-//import java.util.ArrayList;
-//import java.util.Collection;
-//import java.util.List;
-//import java.util.Locale;
-//import java.util.Set;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> implements Filterable {
     private Context context;
     Activity activity;
-    private ArrayList<Trip> tripArrayList;
-//    private ArrayList trip_id, trip_name, trip_destination, trip_date, trip_risk, trip_description;
+    private ArrayList<Trip> tripArrayList, tripArrayListAll;
 
-    CustomAdapter(Activity activity, Context context, ArrayList<Trip> tripArrayList) {
+
+    public CustomAdapter(Activity activity, Context context, ArrayList<Trip> tripArrayList) {
         this.activity = activity;
         this.context = context;
         this.tripArrayList = tripArrayList;
-//        this.trip_id = trip_id;
-//        this.trip_name = trip_name;
-//        this.trip_destination = trip_destination;
-//        this.trip_date = trip_date;
-//        this.trip_risk = trip_risk;
-//        this.trip_description = trip_description;
 
-//        this.trip_id_filter = trip_id;
-//        this.trip_name_filter = trip_name;
-//        this.trip_destination_filter = trip_destination;
-//        this.trip_date_filter = trip_date;
-//        this.trip_risk_filter = trip_risk;
-//        this.trip_description_filter = trip_description;
+        tripArrayListAll = new ArrayList<>();
+        tripArrayListAll.addAll(tripArrayList);
     }
 
     @NonNull
@@ -53,6 +38,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public CustomAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.my_row, parent, false );
+
         return new MyViewHolder(view);
     }
 
@@ -101,108 +87,42 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return tripArrayList.size();
     }
 
-//    @Override
-//    public Filter getFilter() {
-//        return filter;
-//    }
-//
-//    Filter filter = new Filter() {
-//        @Override
-//        protected FilterResults performFiltering(CharSequence charSequence) {
-////            Set<String> filteredIdList = new HashSet<String>();
-////            Set<String> filteredNameList = new HashSet<String>();
-////            Set<String> filteredDestinationList = new HashSet<String>();
-////            Set<String> filteredDateList = new HashSet<String>();
-////            Set<String> filteredRiskList = new HashSet<String>();
-////            Set<String> filteredDescriptionList = new HashSet<String>();
-//
-////            HashMap<String, ArrayList> finalFilteredList = new HashMap<String, ArrayList>();
-//            List<String> filteredIdList = new ArrayList<String>();
-//
-//            if(charSequence.toString().isEmpty()) {
-////                filteredNameList.addAll(trip_name);
-////                filteredIdList.addAll(trip_id);
-////                filteredDestinationList.addAll(trip_destination);
-////                filteredDateList.addAll(trip_date);
-////                filteredRiskList.addAll(trip_risk);
-////                filteredDescriptionList.addAll(trip_description);
-//                filteredIdList.addAll(trip_id);
-//            }else{
-//                Log.d("charSequence", (String) charSequence);
-//
-//                for(int i=0; i < trip_name.size(); i++) {
-//
-//                    String tripId = String.valueOf(trip_id.get(i));
-//                    String tripName = String.valueOf(trip_name.get(i));
-////                    String tripDestination = String.valueOf(trip_destination.get(i));
-////                    String tripDate = String.valueOf(trip_date.get(i));
-////                    String tripRisk = String.valueOf(trip_risk.get(i));
-////                    String tripDescription = String.valueOf(trip_description.get(i));
-//
-//                    if(tripName.toLowerCase().contains(charSequence.toString().toLowerCase())) {
-//                        Log.d("Found tripName", tripName);
-//
-//                        filteredIdList.add(tripId);
-//                    }
-//                }
-//            }
-//
-//            FilterResults filterResults = new FilterResults();
-//            filterResults.values = filteredIdList;
-//
-//            Log.d("filteredIdList", String.valueOf(filteredIdList));
-//
-//            return filterResults;
-//        }
-//
-//        @Override
-//        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-////            ArrayList result = (ArrayList) filterResults.values;
-//
-////            System.out.println(Arrays.deepToString(result.toArray()));
-////            trip_name.addAll((Collection) filterResults.values);
-////            trip_id.clear();
-////            trip_id.addAll((Collection) filterResults.values);
-//            Log.d("filterResults values", String.valueOf(filterResults.values));
-//
-//            ArrayList<String> results = (ArrayList<String>) filterResults.values;
-//
-//
-//
-//
-//
-//
-//                for(String result: results) {
-//                    Log.d("compare value 1", result);
-//
-//                    for (int i = 0; i < trip_id.size(); i++) {
-//                        Log.d("compare value 2", String.valueOf(i));
-//
-//                        if(!result.contains(String.valueOf(i)) && i != 0) {
-//                            Log.d("filter Index", String.valueOf(i));
-//                            trip_id.remove(i);
-//                            trip_name.remove(i);
-//                            trip_date.remove(i);
-//                            trip_destination.remove(i);
-//                            trip_risk.remove(i);
-//                            trip_description.remove(i);
-//                        }
-//                    }
-//                }
-//
-//
-////            for (int i = 0; i < trip_name.size(); i++) {
-////                Log.d("Render tripName", tripName);
-////            }
-//            Log.d("render trip_name", String.valueOf(trip_name));
-////            trip_name.removeIf((name, i) -> Objects.equals(filterResults.values));
-//            notifyDataSetChanged();
-//        }
-//    };
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
 
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
 
+            ArrayList<Trip> filteredList = new ArrayList<>();
 
+            if(charSequence.toString().isEmpty()) {
+                filteredList.addAll(tripArrayListAll);
+            }else{
+                Log.d("charSequence", (String) charSequence);
 
+                for(Trip trip: tripArrayListAll) {
+                    if(trip.getTripName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                        filteredList.add(trip);
+                    }
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            tripArrayList.clear();
+            tripArrayList.addAll((Collection<? extends Trip>) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
