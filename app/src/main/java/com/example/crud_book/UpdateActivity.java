@@ -18,7 +18,7 @@ public class UpdateActivity extends AppCompatActivity {
     EditText name_input, destination_input, date_input, description_input;
     RadioGroup isRisk_radioGroup;
     RadioButton riskBtn, notRiskBtn, radioButton;
-    Button update_button, delete_button;
+    Button update_button, delete_button, view_expenses_button;
     String id, name, destination, date, risk, description;
 
     @Override
@@ -37,6 +37,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         update_button = findViewById(R.id.update_button);
         delete_button = findViewById(R.id.delete_button);
+        view_expenses_button = findViewById(R.id.expense_button);
 
         getAndSetIntentData();
 
@@ -89,6 +90,15 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 confirmDialog();
+            }
+        });
+
+        view_expenses_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UpdateActivity.this, ExpenseActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
 

@@ -14,9 +14,19 @@
         android:theme="@style/Theme.CRUD_Book"
         tools:targetApi="31">
         <activity
+            android:name=".AddExpenseActivity"
+            android:exported="false"
+            android:label="Create Expense"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity
+            android:name=".ExpenseActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".UpdateActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AddActivity"
             android:exported="false"
@@ -26,7 +36,6 @@
             android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

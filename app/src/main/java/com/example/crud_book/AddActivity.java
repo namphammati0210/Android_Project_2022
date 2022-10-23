@@ -26,8 +26,6 @@ public class AddActivity extends AppCompatActivity {
         description_input = findViewById(R.id.description_input);
 
         isRisk_radioGroup = findViewById(R.id.isRisk_radioGroup);
-//        risk_radio = findViewById(R.id.risk_radio);
-//        notRisk_radio = findViewById(R.id.notRisk_radio);
 
         add_button = findViewById(R.id.add_button);
 
