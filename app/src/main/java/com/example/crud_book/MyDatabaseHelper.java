@@ -17,6 +17,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private Context context;
     private static final String DATABASE_NAME="BookLibrary.db";
     private static final int DATABASE_VERSION=1;
+
+    // trip table
     private static final String TABLE_NAME="trip";
     private static final String COLUMN_ID="_id";
     private static final String COLUMN_NAME="name";
@@ -25,7 +27,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_RISK="risk";
     private static final String COLUMN_DESCRIPTION="description";
 
-     MyDatabaseHelper(@Nullable Context context) {
+    // expense table
+    private static final String TABLE_EXPENSE_NAME="expense";
+    private static final String COLUMN_EXPENSE_ID="_id";
+    private static final String COLUMN_EXPENSE_TYPE="type";
+    private static final String COLUMN_EXPENSE_AMOUNT="amount";
+    private static final String COLUMN_EXPENSE_DATE="date";
+    private static final String COLUMN_EXPENSE_TRIP_ID="trip_id";
+
+    MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -40,12 +50,22 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_RISK + " TEXT, " +
                 COLUMN_DESCRIPTION + " INTEGER); ";
 
+        String createExpenseQuery = "CREATE TABLE " + TABLE_EXPENSE_NAME +
+                " (" + COLUMN_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_EXPENSE_TYPE + " TEXT, " +
+                COLUMN_EXPENSE_AMOUNT + " TEXT, " +
+                COLUMN_EXPENSE_DATE + " TEXT, " +
+                COLUMN_EXPENSE_TRIP_ID + " INTEGER,"
+                + " FOREIGN KEY ("+COLUMN_EXPENSE_TRIP_ID+") REFERENCES "+TABLE_NAME+"("+COLUMN_ID+"));";
+
         db.execSQL(query);
+        db.execSQL(createExpenseQuery);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSE_NAME);
         onCreate(db);
     }
 
@@ -99,28 +119,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
                 trips.add(new Trip(id, name, destination, date, risk, description));
             }
-
-//            if (cursor.moveToFirst()) {
-//                do {
-                    // on below line we are adding the data from cursor to our array list.
-//                    courseModalArrayList.add(new CourseModal(cursorCourses.getString(1),
-//                            cursorCourses.getString(4),
-//                            cursorCourses.getString(2),
-//                            cursorCourses.getString(3)));
-//                    String id = cursor.getString(0);
-//                    String name = cursor.getString(1);
-//                    String destination = cursor.getString(2);
-//                    String date = cursor.getString(3);
-//                    String risk = cursor.getString(4);
-//                    String description = cursor.getString(5);
-//
-//                    trips.add(new Trip(id, name, destination, date, risk, description));
-//                } while ( cursor.moveToNext());
-                // moving our cursor to next.
-//            }
-            // at last closing our cursor
-            // and returning our array list.
-//            cursor.close();
         }
 
         return trips;
@@ -161,5 +159,56 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }else{
             Toast.makeText(context, "Delete data into database successfully", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    void createExpense (String type, String amount, String date, String tripId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+        Log.d("type", "Value: " + type);
+        Log.d("amount", "Value: " + amount);
+        Log.d("date", "Value: " + date);
+        Log.d("tripId", "Value: " + tripId);
+
+        contentValues.put(COLUMN_EXPENSE_TYPE, type);
+        contentValues.put(COLUMN_EXPENSE_AMOUNT, amount);
+        contentValues.put(COLUMN_DATE, date);
+        contentValues.put(COLUMN_EXPENSE_TRIP_ID, tripId);
+
+        long result = db.insert(TABLE_EXPENSE_NAME, null, contentValues);
+
+        if(result == -1) {
+            Toast.makeText(context, "Create expense failed !!!", Toast.LENGTH_SHORT).show();
+        }
+
+        Toast.makeText(context, "Create expense successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    public ArrayList<Expense> readAllExpensesByTripId(String trip_id) {
+        String query = "SELECT * FROM " + TABLE_EXPENSE_NAME + " where trip_id = '" +trip_id + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        ArrayList<Expense> expenses = new ArrayList<>();
+
+        if(db != null) {
+            cursor = db.rawQuery(query, null);
+
+            if (cursor.getCount() == 0) {
+                Log.d("Data", "No expense data");
+            }
+
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(0);
+                String type = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String date = cursor.getString(3);
+                String tripId = cursor.getString(4);
+
+                expenses.add(new Expense(id, type, amount, date, tripId));
+            }
+        }
+        return expenses;
     }
 }
