@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton add_button;
     MyDatabaseHelper myDB;
-//    ArrayList<String> trip_id, trip_name, trip_destination, trip_date, trip_risk, trip_description;
     ArrayList<Trip> tripArrayList;
     CustomAdapter customAdapter;
 
@@ -52,15 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup trip data
         myDB = new MyDatabaseHelper(MainActivity.this);
-//        trip_id = new ArrayList<>();
-//        trip_name = new ArrayList<>();
-//        trip_destination = new ArrayList<>();
-//        trip_date = new ArrayList<>();
-//        trip_risk = new ArrayList<>();
-//        trip_description = new ArrayList<>();
-
-        // Render data to recycleView with CustomAdapter
-//        storeDataInArrays();
         tripArrayList = myDB.readAllData();
 
         customAdapter = new CustomAdapter(MainActivity.this, this, tripArrayList);
@@ -68,26 +58,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_menu, menu);
-//        MenuItem item = menu.findItem(R.id.action_search);
-//        SearchView searchView = (SearchView) item.getActionView();
-//
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                customAdapter.getFilter().filter(newText);
-//                return false;
-//            }
-//        });
-//        return super.onCreateOptionsMenu(menu);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                customAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
 //
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
@@ -95,25 +85,5 @@ public class MainActivity extends AppCompatActivity {
 //        if(requestCode == 1){
 //            recreate();
 //        }
-//    }
-
-//    void storeDataInArrays() {
-//        Cursor cursor = myDB.readAllData();
-//
-//        if(cursor.getCount() == 0) {
-//            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        while(cursor.moveToNext()) {
-//            trip_id.add(cursor.getString(0));
-//            trip_name.add(cursor.getString(1));
-//            trip_destination.add(cursor.getString(2));
-//            trip_date.add(cursor.getString(3));
-//            trip_risk.add(cursor.getString(4));
-//            trip_description.add(cursor.getString(5));
-//        }
-//
-//
 //    }
 }

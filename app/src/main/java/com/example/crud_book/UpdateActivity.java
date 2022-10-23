@@ -59,6 +59,27 @@ public class UpdateActivity extends AppCompatActivity {
                 risk = radioButton.getText().toString().trim();
                 description = description_input.getText().toString().trim();
 
+                if(name.equals("")){
+                    name_input.setError("Please enter trip name");
+                    name_input.requestFocus();
+                    return;
+                }
+                if(destination.equals("")){
+                    destination_input.setError("Please enter destination");
+                    destination_input.requestFocus();
+                    return;
+                }
+                if(date.equals("")){
+                    date_input.setError("Please enter date");
+                    date_input.requestFocus();
+                    return;
+                }
+                if(description.equals("")){
+                    description_input.setError("Please enter description");
+                    description_input.requestFocus();
+                    return;
+                }
+
                 dbInstance.updateData(id, name, destination, date, risk, description);
 
             }
